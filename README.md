@@ -3,7 +3,7 @@
 - Prerequisities: AWS Account
 - Region: Ireland
 
-## Manually Deploy App
+## Deploy App
 
 ### Create an Instance
 
@@ -14,9 +14,10 @@
   - Amazon Machine Image: choose `Ubuntu Server 22.04 LTS`
   - Instance type: `t2.micro`
   - Select your existing key pair stored in AWS.
-    ![alt text](image.png)
-  - Networking settings: [allow for SSH and HTTP]
-    <br><img src="./assets/image-4.png">
+    <br><img src="./assets/image0.png">
+
+  - Network settings > click `Edit` > click `Add security group rule` > Type: `HTTP` > Source: `0.0.0.0/0`.
+    <br><img src="./assets/image-14.png">  
 
   - Click `Launch instance`.
   - Then click the instance ID to see its details.
@@ -27,20 +28,22 @@ By default, AWS creates a security group when launching an instance.
 
 - Navigate to the security group ID of this instance just created.
 - At the bottom, click **Edit inbound rules** to add a rule:
-    - Type: Custom Type
+    - Type: Custom TCP
     - Port range: 3000
     - Source type: Custom
     - Source: 0.0.0.0/0
     <img src="./assets/image-3.png">
-- Click `Save changes`.
+- Click `Save rules`.
 
 ### SSH into the instance
 
-- On the `Instances` dashboard, click your instance ID, click `Connect` > `SSH client` and follow the prompts provided.
+- Back to the Instance ID for the Application, click `Connect` > `SSH client` and follow the prompts provided.
 - Copy and paste the prompt provided below where it says `Example`.
 - On your local machine, open your command prompt terminal and paste that prompt and enter `yes`.
 
-### Manually follow the commands:
+### Manually vs Automated
+
+#### Manually
 
 - Update and upgrade:
   ```
@@ -75,14 +78,13 @@ By default, AWS creates a security group when launching an instance.
   
   <img src="./assets/image-6.png">
 
-### Test on Browser
+- Test on Browser
+  - Enter `<AppPublicIP>` in a new browser tab:
+    <br><img src="./assets/image-8.png">
+  - Enter `<AppPublicIP>:3000` in a new broser tab:
+    <br><img src="./assets/image-7.png">
 
-- Enter `<AppPublicIP>` in a new browser tab:
-  <br><img src="./assets/image-8.png">
-- Enter `<AppPublicIP>:3000` in a new broser tab:
-  <br><img src="./assets/image-7.png">
-
-## Scripting (Automate deployment of app with a Script)
+#### Scripting (Automate deployment of app with a Script)
 
 You can achieve the same results by running a bash script instead of manually inputting commands.
 
@@ -98,7 +100,7 @@ You can achieve the same results by running a bash script instead of manually in
     sudo DEBIAN_FRONTEND=noninteractive apt-get upgrade -y
 
     # Update config file
-     sudo sed -i "s/\$nrconf{restart} = 'i';/\$nrconf{restart} = 'a';/g" /etc/needrestart/needrestart.conf
+    sudo sed -i "s/\$nrconf{restart} = 'i';/\$nrconf{restart} = 'a';/g" /etc/needrestart/needrestart.conf
 
     # Install nginx (goes to the root)
     sudo DEBIAN_FRONTEND=noninteractive apt install nginx -y
@@ -226,8 +228,30 @@ export DB_HOST=mongodb://172.31.35.149:27017/posts
 
 ### Test on browser
 
-- On a new brwoser tab, enter: `<AppPublicIP>/posts`
+- On a new browser tab, enter: `<AppPublicIP>/posts`
+
 
 #### Troubleshooting
 
 <br><img src="./assets/image-10.png">
+
+#### Solution
+
+- Export the Database Public IP address instead of the private one:
+  ```
+  export DB_HOST=mongodb://3.252.211.65:27017/posts
+  ```
+- Then run the commands:
+  ```
+  pm2 stop all
+  sudo pm2 kill 
+  cd tech257_sparta_app/app
+  sudo npm install
+  sudo -E npm install
+  sudo -E npm start
+  ```
+
+<!--
+sudo kill -SIGTERM $(ps aux | grep '[p]m2' | awk '{print $2}')
+-->
+<img src="./assets/image-4.png">
