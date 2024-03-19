@@ -14,8 +14,9 @@
   - Amazon Machine Image: choose `Ubuntu Server 22.04 LTS`
   - Instance type: `t2.micro`
   - Select your existing key pair stored in AWS.
-    <br><img src="./assets/image0.png">
-
+  <!-- Select `Create new key pair`
+    - Download .pem key to local machine > move it to .ssh folder (`mv keyname.pem ~/.ssh)
+    <br><img src="./assets/image0.png"> -->
   - Network settings > click `Edit` > click `Add security group rule` > Type: `HTTP` > Source: `0.0.0.0/0`.
     <br><img src="./assets/image-14.png">  
 
@@ -100,7 +101,7 @@ You can achieve the same results by running a bash script instead of manually in
     sudo DEBIAN_FRONTEND=noninteractive apt-get upgrade -y
 
     # Update config file
-    sudo sed -i "s/\$nrconf{restart} = 'i';/\$nrconf{restart} = 'a';/g" /etc/needrestart/needrestart.conf
+    sudo sed -i "s/#\$nrconf{restart} = 'i';/\$nrconf{restart} = 'a';/g" /etc/needrestart/needrestart.conf
 
     # Install nginx (goes to the root)
     sudo DEBIAN_FRONTEND=noninteractive apt install nginx -y
@@ -156,7 +157,7 @@ The above script contains a reverse proxy which means we do not need to enter `<
   - Amazon Machine Image: choose `Ubuntu Server 22.04 LTS`
   - Instance type: `t2.micro`
   - Select your existing key pair stored in AWS.
-  - Networking settings: [allow for SSH]
+  - Network settings: [allow for SSH]
     <br><img src="./assets/image-11.png">
 
   - Click `Launch instance`.
