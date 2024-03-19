@@ -233,25 +233,21 @@ export DB_HOST=mongodb://172.31.35.149:27017/posts
 
 #### Troubleshooting
 
-<br><img src="./assets/image-10.png">
+<img src="./assets/image-10.png">
 
 #### Solution
 
-- Export the Database Public IP address instead of the private one:
+Export the Database Public IP address instead of the private one:
   ```
   export DB_HOST=mongodb://3.252.211.65:27017/posts
   ```
-- Then run the commands:
+<!-- Run:
   ```
   pm2 stop all
-  sudo pm2 kill 
+  sudo kill -SIGTERM $(ps aux | grep '[p]m2' | awk '{print $2}')
   cd tech257_sparta_app/app
   sudo npm install
   sudo -E npm install
   sudo -E npm start
-  ```
-
-<!--
-sudo kill -SIGTERM $(ps aux | grep '[p]m2' | awk '{print $2}')
--->
+  ```-->
 <img src="./assets/image-4.png">
